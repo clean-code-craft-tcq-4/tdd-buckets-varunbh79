@@ -1,4 +1,4 @@
-name: Check Completeness
+name: Enter Reflections
 
 on: [push, pull_request]
 
