@@ -1,29 +1,40 @@
 package Test_Driven_Ranges;
 
 import java.time.temporal.ValueRange;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ChargingCurrentStatistics {
 
 
-
-    public Map<ValueRange,Integer> getCurrentRangeMapBasedOnInput(Integer[] inputSample) {
+    private Map<ValueRange,Integer> getCurrentRangeMapBasedOnInput(Integer[] inputSample) {
         List<Integer> sortedCurrentRange = sortCurrentRange(inputSample);
         return storeReadingsBasedOnRange(sortedCurrentRange);
     }
 
+    private boolean validateInputSeries(Integer[] integers) {
+        return integers != null && integers.length != 0;
+    }
+
     public String getFinalResult(Integer[] integers) {
 
-        Map<ValueRange,Integer> currentRangeMap = getCurrentRangeMapBasedOnInput(integers);
-        String result = currentRangeMap.entrySet().stream()
-                .map(rangeMap-> {
-                    String val = rangeMap.getKey().getMinimum() + "-" + rangeMap.getKey().getMaximum()
-                            + "," + rangeMap.getValue();
-                    return val;
-                } ).collect(Collectors.joining(" "));
-        return  result;
+        if(validateInputSeries(integers)) {
+            Map<ValueRange, Integer> currentRangeMap = getCurrentRangeMapBasedOnInput(integers);
+            return currentRangeMap.entrySet().stream()
+                    .map(ChargingCurrentStatistics::transformMapToString)
+                    .collect(Collectors.joining(" "));
+        }
+       return null;
+    }
+
+    private static String transformMapToString(Map.Entry<ValueRange, Integer> rangeMap) {
+        return  String.format("%s-%s,%d",rangeMap.getKey().getMinimum()
+                ,rangeMap.getKey().getMaximum(),rangeMap.getValue());
     }
 
     private List<Integer> sortCurrentRange(Integer[] integers) {
@@ -33,31 +44,27 @@ public class ChargingCurrentStatistics {
     }
 
     private Map<ValueRange,Integer> storeReadingsBasedOnRange(List<Integer> integerList) {
-        int initialCounter = 1;
-        Map<ValueRange, Integer> readingRangeMap = new HashMap<>();
+        int currentVal = integerList.get(0);
         List<Integer> intermediateResult = new ArrayList<>();
-        int intermediateCounter = 1, previousData = integerList.get(0);
-        intermediateResult.add(integerList.get(0));
-        while (initialCounter < integerList.size()) {
-            if ((previousData == integerList.get(initialCounter)) || (previousData + 1 == integerList.get(initialCounter))) {
-                    intermediateResult.add(integerList.get(initialCounter));
-                    previousData = integerList.get(initialCounter);
-                    intermediateCounter++;
+        Map<ValueRange,Integer> rangeMap = new HashMap<>();
+        intermediateResult.add(currentVal);
+        for (int i = 1; i < integerList.size(); i++) {
+            if((integerList.get(i)-currentVal) <=1){
+                currentVal = integerList.get(i);
+                intermediateResult.add(currentVal);
             } else {
-                    if (!intermediateResult.isEmpty()) {
-                        readingRangeMap.put(ValueRange.of(intermediateResult.get(0), intermediateResult.get(intermediateResult.size() - 1)), intermediateCounter);
-                        intermediateResult.clear();
-                        intermediateCounter = 1;
-                    }
-                    previousData = integerList.get(initialCounter);
-                    intermediateResult.add(integerList.get(initialCounter));
+                currentVal = integerList.get(i);
+                rangeMap.put(ValueRange.of(intermediateResult.get(0),intermediateResult.get(intermediateResult.size()-1)),intermediateResult.size());
+                intermediateResult.clear();
+                intermediateResult.add(currentVal);
             }
-            initialCounter++;
         }
-        if (!intermediateResult.isEmpty()) {
-            readingRangeMap.put(ValueRange.of(intermediateResult.get(0), intermediateResult.get(intermediateResult.size() - 1)), intermediateCounter);
-        }
-        return readingRangeMap;
+        rangeMap.putIfAbsent(ValueRange.of(intermediateResult.get(0),
+                intermediateResult.get(intermediateResult.size()-1)),
+        intermediateResult.size());
+        return rangeMap;
     }
+
+
 
 }

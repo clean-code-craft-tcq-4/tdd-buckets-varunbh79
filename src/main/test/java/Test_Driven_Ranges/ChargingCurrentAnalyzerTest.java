@@ -34,9 +34,9 @@ public class ChargingCurrentAnalyzerTest {
     @Test
     public void testReadingsForDisjointSeries() {
 
-        Integer[] inputSample = {3,3,4,5,8,9,10};
+        Integer[] inputSample = {3,3,4,5,8,9,10,12,13};
         String actualResult = chargingCurrentAnalyzer.getChargingCurrentStatisticsByRange(inputSample);
-        String expectedResult = "3-5,4 8-10,3";
+        String expectedResult = "3-5,4 8-10,3 12-13,2";
         assertEquals(actualResult,expectedResult);
     }
 
