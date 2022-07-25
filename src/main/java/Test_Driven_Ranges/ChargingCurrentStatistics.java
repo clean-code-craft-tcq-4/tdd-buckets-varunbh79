@@ -4,7 +4,7 @@ import java.time.temporal.ValueRange;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,7 +46,7 @@ public class ChargingCurrentStatistics {
     private Map<ValueRange,Integer> storeReadingsBasedOnRange(List<Integer> integerList) {
         int currentVal = integerList.get(0);
         List<Integer> intermediateResult = new ArrayList<>();
-        Map<ValueRange,Integer> rangeMap = new HashMap<>();
+        Map<ValueRange,Integer> rangeMap = new LinkedHashMap<>();
         intermediateResult.add(currentVal);
         for (int i = 1; i < integerList.size(); i++) {
             if((integerList.get(i)-currentVal) <=1){

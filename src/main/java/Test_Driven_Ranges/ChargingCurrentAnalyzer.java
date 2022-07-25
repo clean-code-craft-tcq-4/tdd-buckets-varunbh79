@@ -21,7 +21,6 @@ public class ChargingCurrentAnalyzer {
     }
 
 
-
     public void printChargingCurrentReadings(String result) {
         System.out.println("Ranges  Readings");
         String[] arrRes = result.split(" ");

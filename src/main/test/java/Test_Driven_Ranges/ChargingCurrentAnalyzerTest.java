@@ -72,5 +72,32 @@ public class ChargingCurrentAnalyzerTest {
         assertEquals(actualResult,expectedResult);
     }
 
+    @Test
+    public void testReadingsForNegativeNumberSeries() {
+
+        Integer[] inputSample = {-2,0,-1,-3,-4};
+        String actualResult = chargingCurrentAnalyzer.getChargingCurrentStatisticsByRange(inputSample);
+        String expectedResult = "-4-0,5";
+        assertEquals(actualResult,expectedResult);
+    }
+
+    @Test
+    public void testReadingsForSegregatedMixedNumberSeries() {
+
+        Integer[] inputSample = {-2,0,-1,-3,-4,4,5,3,2,7,6};
+        String actualResult = chargingCurrentAnalyzer.getChargingCurrentStatisticsByRange(inputSample);
+        String expectedResult = "-4-0,5 2-7,6";
+        assertEquals(actualResult,expectedResult);
+    }
+
+
+    @Test
+    public void testReadingsForDiscreteMixedNumberSeries() {
+
+        Integer[] inputSample = {-2,0,-1,-3,-4,2,4,5,3,-11,-9,-10,24,21,22,23};
+        String actualResult = chargingCurrentAnalyzer.getChargingCurrentStatisticsByRange(inputSample);
+        String expectedResult = "-11--9,3 -4-0,5 2-5,4 21-24,4";
+        assertEquals(actualResult,expectedResult);
+    }
 
 }
