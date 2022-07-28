@@ -100,4 +100,15 @@ public class ChargingCurrentAnalyzerTest {
         assertEquals(actualResult,expectedResult);
     }
 
+    @Test
+    public void testReadingsForTwelveBitInput() {
+
+        Integer[] inputSample = {250,502,603,4095};
+        String expectedResult = "1-2,3 11-11,1";
+        String actualResult = chargingCurrentAnalyzer.getChargingCurrentStatisticsThroughA2DConverter(inputSample);
+        assertEquals(actualResult,expectedResult);
+
+    }
+
+
 }
