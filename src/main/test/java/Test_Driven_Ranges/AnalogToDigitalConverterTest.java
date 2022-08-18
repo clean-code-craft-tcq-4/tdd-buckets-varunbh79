@@ -97,20 +97,18 @@ public class AnalogToDigitalConverterTest {
         String actualRange = digitalConverter.getConversionReadingsInRange(readings,minSensorReading,maxSensorReading,
                         minAmps,maxAmps);
         String expectedRange = "0-0,1 3-3,2 10-10,1";
-        System.out.println(actualRange);
+        assertEquals(actualRange,expectedRange);
 
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void test10BitOutOfRangeSensorReadingsRange() {
 
-        Integer[] readings = {120, 1090, 1400, 4030};
+        Integer[] readings = {120, 1090,4095,201};
         int maxSensorReading = 4094, minSensorReading = 0;
         int minAmps = 0, maxAmps = 10;
-        String actualRange = digitalConverter.getConversionReadingsInRange(readings,minSensorReading,maxSensorReading,
+        digitalConverter.getConversionReadingsInRange(readings,minSensorReading,maxSensorReading,
                 minAmps,maxAmps);
-        String expectedRange = "0-0,1 3-3,2 10-10,1";
-        System.out.println(actualRange);
 
 
     }
@@ -135,7 +133,7 @@ public class AnalogToDigitalConverterTest {
         Integer[] readings = {120, 1024, 90, 798};
         int maxSensorReading = 1023, minSensorReading = 0;
         int minAmps = -15, maxAmps = 15;
-        String actualRange = digitalConverter.getConversionReadingsInRange(readings,minSensorReading,maxSensorReading,
+         digitalConverter.getConversionReadingsInRange(readings,minSensorReading,maxSensorReading,
                 minAmps,maxAmps);
 
     }
