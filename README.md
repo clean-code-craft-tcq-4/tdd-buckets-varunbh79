@@ -55,3 +55,8 @@ Start Test-driven approach
 
 ###
 Implemented A2D Converter functionality with test case for 12-bit input
+
+###
+Following scenarios that are covered
+1. Current sensor with 12-bit A2D Convertor readings accepted : 0-4094 with current amp between 0A - 10A
+2.  Current sensor with 10-bit A2D Convertor readings accepted : 0- 1023 with current amp between -15A-15A
